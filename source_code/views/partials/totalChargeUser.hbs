@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/totalCharge.css">
+    <script>
+       function breakfastFunc(){
+            $('input[name="dbbuffet"]').change(function(e){
+                if ($("input[name='dbbuffet']:checked").length > 1) {
+                    $(this).prop('checked', false);                    
+                }
+                calculateUser();
+                calculatePoints();
+            })
+        }
+
+        function lunchFunc(){
+            $('input[name="dlbuffet"]').change(function(e){
+                if ($("input[name='dlbuffet']:checked").length > 1) {
+                    $(this).prop('checked', false)
+                }
+                calculateUser();
+                calculatePoints();
+            })
+        }
+
+        function dinnerFunc(){
+            $('input[name="ddbuffet"]').change(function(e){
+                if ($("input[name='ddbuffet']:checked").length > 1) {
+                    $(this).prop('checked', false)
+                }
+                calculateUser();
+                calculatePoints();
+            })
+        }
+
+        function allFunc(){
+            $('input[name="dailybuffet"]').change(function(e){
+                if ($("input[name='dailybuffet']:checked").length > 1) {
+                    $(this).prop('checked', false)
+                }
+                calculateUser();
+                calculatePoints();
+            })
+        }
+
+        function calculateUser(){
+            var fees = 0;
+            var room = $("#roomfees");
+            var extra = $("#extrafees");
+            var service = $("#servicefees");
+            var total = $("#total");
+            var breakfast = $("#breakfastbuffet");
+            var lunch = $("#lunchbuffet");
+            var dinner = $("#dinnerbuffet");
+            var allbuffet = $("#allbuffet");
+            var pickup = $("#pickupprice");
+            var numrooms = $("#numrooms");
+            var totalStay = $("#totalwholestay");
+            var daySpan = $("#dateSpan");
+
+            var inputtotal = $("#inputtotal");
+
+            $("#airport").text(parseFloat(0).toFixed(2));
+
+            //console.log('calculate');
+            //console.log($("input[class='form-check-input extrafee']:checked").length);
+            
+            if ($("input[class='form-check-input extrafee']:checked").val() === undefined){
+                extra.text(parseFloat(0).toFixed(2));
+                var amount = parseFloat(room.text().trim()) + parseFloat(service.text().trim()) + parseFloat(extra.text());
+                var part = parseInt(daySpan.text()) * amount;
+                part = part.toFixed(2);
+                total.text(part);
+                var totalfinal = parseFloat(total.text()) + parseFloat($("#airport").text());
+                totalfinal = totalfinal.toFixed(2);
+                totalStay.text(totalfinal);
+                inputtotal.attr("value",totalfinal);
+            }
+
+            if ($("input[class='form-check-input extrafee']:checked") != "undefined"){
+                $.each($("input[class='form-check-input extrafee']:checked"), function(){
+                    var string;
+                    if ($(this).val() === 'breakfastbuffet'){
+                        fees = parseFloat(fees) + parseFloat(breakfast.text());
+                    } else if ($(this).val() === 'lunchbuffet'){
+                        fees = parseFloat(fees) + parseFloat(lunch.text());
+                    } else if ($(this).val() === 'dinnerbuffet') {
+                        fees = parseFloat(fees) + parseFloat(dinner.text());
+                    } else if ($(this).val() === 'allbuffet'){
+                        fees = parseFloat(fees) + parseFloat(allbuffet.text());
+                    } else if ($(this).val() === 'pickupprice'){
+                        //fees = parseFloat(fees) + parseFloat(pickup.text());
+                        $("#airport").text(parseFloat(pickup.text()).toFixed(2));
+                    }
+
+                    extra.text(fees.toFixed(2));
+                    var amount = parseFloat(room.text().trim()) + parseFloat(service.text().trim()) + parseFloat(fees);
+                    var part = parseInt(daySpan.text()) * amount;
+                    part = part.toFixed(2);
+                    total.text(part);
+                    var totalfinal = parseFloat(total.text()) + parseFloat($("#airport").text());
+                    totalfinal = totalfinal.toFixed(2);
+                    totalStay.text(totalfinal);
+                    inputtotal.attr("value",totalfinal);
+                });
+            }
+            getRequestString();
+        }
+
+        function calculatePoints(){
+            var bbpoints = $("#breakfastbuffetpoints");
+            var lbpoints = $("#lunchbuffetpoints");
+            var dbpoints = $("#dinnerbuffetpoints");
+            var allpoints = $("#allbuffetpoints");
+            var spatreat = $("#spatreatmentpoints");
+            var classic = $("#classicdeluxepoints");
+            
+
+            //USE FOR CLASSIC DELUXE POINTS
+            var room = $("#roomfees");
+            var numrooms = $("#numrooms");
+            var priceroom = $("#priceperroom");
+
+            //USE FOR POINTS
+            var total = $("#totalpoint");
+            var inputpoint = $("#inputpoints");
+
+            var points = 0;
+
+            if ($("input[class='form-check-input pointfee']:checked").val() === undefined){
+                total.text(parseInt(0));
+                removeDIV();
+                inputpoint.val(parseInt(0));
+            }
+
+            room.text(parseFloat(numrooms.val().trim()) * parseFloat(priceroom.val().trim()));
+
+            calculateUser();
+
+            if ($("input[class='form-check-input pointfee']:checked") != "undefined"){
+                $.each($("input[class='form-check-input pointfee']:checked"), function(){
+
+                    if ($(this).val() === 'breakfastbuffetpoints'){
+                        points = parseInt(points) + parseInt(bbpoints.text());
+                    } else if ($(this).val() === 'lunchbuffetpoints'){
+                        points = parseInt(points) + parseInt(lbpoints.text());
+                    } else if ($(this).val() === 'dinnerbuffetpoints') {
+                        points = parseInt(points) + parseInt(dbpoints.text());
+                    } else if ($(this).val() === 'allbuffetpoints'){
+                        points = parseInt(points) + parseInt(allpoints.text());
+                    } else if ($(this).val() === 'spatreatment'){
+                        points = parseInt(points) + parseInt(spatreat.text());
+                    } else if ($(this).val() === 'classicDeluxe'){
+                        points = parseInt(points) + parseInt(classic.text());
+                        room.text('0');  
+                        calculateUser();
+                    }
+
+                    total.text(points);
+                    inputpoint.val(points);
+                    removeDIV();
+                    //addDIV();
+
+                });
+            }
+            getRequestString();
+        }
+
+        function removeDIV(){
+            var bbpoints = $("#breakfastbuffetpoints");
+            var lbpoints = $("#lunchbuffetpoints");
+            var dbpoints = $("#dinnerbuffetpoints");
+            var allpoints = $("#allbuffetpoints");
+            var spatreat = $("#spatreatmentpoints");
+            var classic = $("#classicdeluxepoints");
+
+            var totalpoints= $("#totalpoint").text();
+            var currentpoints= $("#membershippoint").text();
+
+            $.each($("input[class='form-check-input pointfee']"),function(){
+                $(this).attr('disabled', false);
+            });
+
+
+            $.each($("input[class='form-check-input pointfee']"),function(){
+                if (!$(this).is(":checked") && $(this).val() === 'breakfastbuffetpoints' && (parseInt(currentpoints) - parseInt(totalpoints)) < parseInt(bbpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                    
+                else if (!$(this).is(":checked") && $(this).val() === 'lunchbuffetpoints' && (parseInt(currentpoints) - parseInt(totalpoints)) < parseInt(lbpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                    
+                else if (!$(this).is(":checked") && $(this).val() === 'dinnerbuffetpoints' && (parseInt(currentpoints) - parseInt(totalpoints)) < parseInt(dbpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                    
+                else if (!$(this).is(":checked") && $(this).val() === 'allbuffetpoints' && (parseInt(currentpoints) - parseInt(totalpoints)) < parseInt(allpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                    
+                else if (!$(this).is(":checked") && $(this).val() === 'spatreatment' && (parseInt(currentpoints) - parseInt(totalpoints)) < parseInt(spatreat.text())){
+                    $(this).attr('disabled', true);
+                }
+
+                else if (!$(this).is(":checked") && $(this).val() === 'classicDeluxe' && (parseInt(currentpoints) - parseInt(totalpoints)) < parseInt(classic.text())){
+                    $(this).attr('disabled', true);
+                }
+            })
+                
+        }
+
+        function getRequestString(){
+            var additional = $("#additionalrequest");
+            var requestString ="";
+
+            if ($("input[type='checkbox']:checked").val() === undefined){
+                //console.log('hello');
+                additional.val("");
+            }
+
+            if ($("input[type='checkbox']:checked") != "undefined"){
+                console.log('hi');
+                $.each($("input[type='checkbox']:checked"), function(){
+                    var string = "";
+                    if ($(this).val() === 'breakfastbuffet'){
+                        string = 'Daily Breakfast Buffet';
+                    } else if ($(this).val() === 'lunchbuffet'){
+                        string = 'Daily Lunch Buffet';
+                    } else if ($(this).val() === 'dinnerbuffet') {
+                        string = 'Daily Dinner Buffet';
+                    } else if ($(this).val() === 'allbuffet'){
+                        string = 'Daily Buffet';
+                    } else if ($(this).val() === 'spatreatment'){
+                        string = 'Spa Treatment for Whole Stay';
+                    } else if ($(this).val() === 'breakfastbuffetpoints'){
+                        string = 'Daily Breakfast Buffet';
+                    } else if ($(this).val() === 'lunchbuffetpoints'){
+                        string = 'Daily Lunch Buffet';
+                    } else if ($(this).val() === 'dinnerbuffetpoints') {
+                        string = 'Daily Dinner Buffet';
+                    } else if ($(this).val() === 'allbuffetpoints'){
+                        string = 'Daily Buffet';
+                    } else if ($(this).val() === 'pickupprice'){
+                        string = 'Arrival and Departure Airport Pick-Up';
+                    }
+
+                    requestString = requestString + string + ", "
+                });
+
+                if (requestString !== ""){
+                    //console.log(requestString);
+                    requestString = requestString.substring(0, requestString.length - 2);
+                    //console.log(requestString);
+                    additional.val(requestString);
+                }
+
+            }
+        }
+
+        function submitWhenYes(){
+            $("#yes").submit();
+            $("#yesbtn").attr("disabled", true);
+        }
+
+        $(document).ready(function(){
+            var bbpoints = $("#breakfastbuffetpoints");
+            var lbpoints = $("#lunchbuffetpoints");
+            var dbpoints = $("#dinnerbuffetpoints");
+            var allpoints = $("#allbuffetpoints");
+            var spatreat = $("#spatreatmentpoints");
+            var classic = $("#classicdeluxepoints");
+
+            var currentpoints = $("#membershippoint").text();
+            
+
+            $.each($("input[class='form-check-input pointfee']"),function(){
+                if ($(this).val() === 'breakfastbuffetpoints' && parseInt(currentpoints) < parseInt(bbpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                else if ($(this).val() === 'lunchbuffetpoints' && parseInt(currentpoints) < parseInt(lbpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                else if ($(this).val() === 'dinnerbuffetpoints' && parseInt(currentpoints) < parseInt(dbpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                    
+                else if ($(this).val() === 'allbuffetpoints' && parseInt(currentpoints) < parseInt(allpoints.text())){
+                    $(this).attr('disabled', true);
+                }
+                    
+                else if ($(this).val() === 'spatreatment' && parseInt(currentpoints) < parseInt(spatreat.text())){
+                    $(this).attr('disabled', true);
+                }
+                else if ($(this).val() === 'classicDeluxe' && parseInt(currentpoints) < parseInt(classic.text())){
+                    $(this).attr('disabled', true);
+                }
+            })     
+
+            $("#yesbtn").attr("disabled", false);    
+        })
+    </script>
+</head>
+
+<body>
+    <div class="row pt-3">
+        <div class="style">Type of Bed</div>
+    </div>
+    <div class="row pt-2">
+        <div class="subheader">Choose between two choices of bed.</div>
+    </div>
+    <div class="row">
+        <img src="/images/AboutUs/MP.svg" width="97%" height="1%">
+    </div>
+    <div class="form-check pt-2 pb-3">
+        <form>
+            <div class="row"></div>
+            <input class="form-check-input" type="radio" name="bedtype" onclick=setBeds() value="firstchoice" id="defaultbed">
+            <label class="form-check-label" for="gridCheck1">
+                <span id="firstbed">{{{bedChoiceOne}}}</span>
+            </label>
+            <br>
+            <div class="row pt-2"></div>
+            <input class="form-check-input" type="radio" name="bedtype" onclick=setBeds() value="secondchoice">
+            <label class="form-check-label" for="gridCheck1">
+                <span id="secondbed">{{{bedChoiceTwo}}}</span>
+            </label>
+        </form>
+    </div>
+    <div class="row pt-3">
+        <div class="style">Additional Requests</div>
+    </div>
+    <div class="row pt-2">
+        <div class="subheader">You can choose to either pay with points or money.</div>
+    </div>
+    <div class="row">
+        <img src="/images/AboutUs/MP.svg" width="97%" height="1%">
+    </div>
+    <div class="row justify-center-content py-2" style="text-align: center; font-size:18px; font-weight: 1000; letter-spacing: 1px;">Available Member Point/s: <span class="ml-2" id="membershippoint"> {{{memberPoints}}}</span></div>
+    <div class="row justify-center-content py-2" style="text-align: center; font-size:18px; font-weight: 1000; letter-spacing: 1px;">Total Point/s From Requests: <span class="ml-2" id="totalpoint"> 0</span></div>
+    <div class="form-check pt-2 pb-4">
+        <form>
+        <div style="font-size:17px; font-weight: 1000; letter-spacing: 1px;" class="ml-n4 mb-2">Daily Breakfast Buffet</div>
+        <div>
+            <input class="form-check-input pointfee" type="checkbox" name="dbbuffet" onclick=breakfastFunc() value="breakfastbuffetpoints">
+            <label class="form-check-label" for="gridCheck1">
+                Use Points (<span id="breakfastbuffetpoints">30000</span> points)
+            </label>
+        </div>
+        <div>
+            <div class="row pt-2"></div>
+            <input class="form-check-input extrafee" type="checkbox" name="dbbuffet" onclick=breakfastFunc() value="breakfastbuffet">
+            <label class="form-check-label" for="gridCheck1">
+                Use Payment (PHP <span id="breakfastbuffet">1500.00</span>)
+            </label>
+        </div>
+        <br>
+        <div style="font-size:17px; font-weight: 1000; letter-spacing: 1px;" class="ml-n4 mb-2">Daily Lunch Buffet</div>
+        <div>
+            <div class="row"></div>
+            <input class="form-check-input pointfee" type="checkbox" name="dlbuffet" onclick=lunchFunc() value="lunchbuffetpoints">
+            <label class="form-check-label" for="gridCheck1">
+                Use Points (<span id="lunchbuffetpoints">50000</span> points)
+            </label>
+        </div>
+        <div>
+            <div class="row pt-2"></div>
+            <input class="form-check-input extrafee" type="checkbox" name="dlbuffet" onclick=lunchFunc() value="lunchbuffet">
+            <label class="form-check-label" for="gridCheck1">
+                Use Payment (PHP <span id="lunchbuffet">1800.00</span>)
+            </label>
+        </div>
+        <br>
+        <div style="font-size:17px; font-weight: 1000; letter-spacing: 1px;" class="ml-n4 mb-2">Daily Dinner Buffet</div>
+        <div>
+            <div class="row"></div>
+            <input class="form-check-input pointfee" type="checkbox" name="ddbuffet" onclick=dinnerFunc() value="dinnerbuffetpoints">
+            <label class="form-check-label" for="gridCheck1">
+                Use Points (<span id="dinnerbuffetpoints">60000</span> points)
+            </label>
+        </div>
+        <div>
+            <div class="row pt-2"></div>
+            <input class="form-check-input extrafee" type="checkbox" name="ddbuffet" onclick=dinnerFunc() value="dinnerbuffet">
+            <label class="form-check-label" for="gridCheck1">
+                Use Payment (PHP <span id="dinnerbuffet">2000.00</span>)
+            </label>
+        </div>
+        <br>
+        <div style="font-size:17px; font-weight: 1000; letter-spacing: 1px;" class="ml-n4 mb-2">Daily Buffet</div>
+        <div>
+            <div class="row"></div>
+            <input class="form-check-input pointfee" type="checkbox" name="dailybuffet" onclick=allFunc() value="allbuffetpoints">
+            <label class="form-check-label" for="gridCheck1">
+                Use Points (<span id="allbuffetpoints">100000</span> points)
+            </label>
+        </div>
+        <div>
+            <div class="row pt-2"></div>
+            <input class="form-check-input extrafee" type="checkbox" name="dailybuffet" onclick=allFunc() value="allbuffet">
+            <label class="form-check-label" for="gridCheck1">
+                Use Payment (PHP <span id="allbuffet">4500.00</span>)
+            </label>
+        </div>
+        <br>
+        <div style="font-size:17px; font-weight: 1000; letter-spacing: 1px;" class="ml-n4 mb-2">Others</div>
+        <div>
+            <div class="row"></div>
+            <input class="form-check-input pointfee" type="checkbox" name="pointsfee" onclick=calculatePoints() value="spatreatment">
+            <label class="form-check-label" for="gridCheck1">
+                Spa Treatment for Whole Stay (<span id="spatreatmentpoints">50000</span> points)
+            </label>
+        </div>
+        <div>
+            <div class="row pt-2"></div>
+            <input class="form-check-input extrafee" type="checkbox" name="extrafee" onclick=calculateUser() value="pickupprice">
+            <label class="form-check-label" for="gridCheck1">
+                Arrival and Departure Airport Pick-Up (PHP <span id="pickupprice">1730.00</span>)
+            </label>
+        </div>
+        </form>
+    </div>
+     {{{checkboxDiv}}}
+    <div class="container pb-4" id="guest">
+        <form method="POST" action="/totalCharge/pay" id="yes" >
+            <div class="form-group">
+                <label for="comment">Additional Comments/Special Requests</label>
+                <textarea class="form-control" id="comment" rows="3" name="requests" value="{{data.requests}}"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="checkInDate" value="{{data.checkInDate}}">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="checkOutDate" value="{{data.checkOutDate}}">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="rooms" value="{{data.rooms}}" id="numrooms">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="adults" value="{{data.adults}}">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="kids" value="{{data.kids}}">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="roomtype" value="{{data.roomtype}}">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="pricePerRoom" value="{{data.pricePerRoom}}" id="priceperroom">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="total" value="{{data.total}}" id="inputtotal">
+            </div> 
+            <div class="form-group">
+                <input type="hidden" name="points" value="0" id="inputpoints">
+            </div> 
+            <div class="form-group">
+                <textarea class="form-control" rows="3" id="additionalrequest" name="additionalrequest" style="display: none;"></textarea>
+            </div> 
+            <div class="form-group">
+                <input type="hidden" name="bedtype" value="" id="typebed">
+            </div> 
+            <div class="form-group text-center">
+                <button type="button" class="btn" data-toggle="modal" data-target="#payMemberModal" id="chargeBtn"> Payment </button>
+                {{!-- <input class="btn" type="submit" value="Payment" id="charge"> --}}
+            </div> 
+
+             {{!-- <div class="row checkout justify-content-center pt-5 mt-2">
+                <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal"> Check Out </button>
+            </div> --}}
+
+            <!-- Modal -->
+            <div class="modal fade" id="payMemberModal" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="payModalLabel">Confirm Payment</h5>
+                            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Clicking Yes will use your registered credit card in your account to pay for this booking. Do you proceed?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button class="btn" onclick="submitWhenYes()" id="yesbtn">Yes</button>
+                            {{!-- <input class="btn" type="submit" value="Payment" id="charge"> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>      
+        </form>
+    </div>
+</body>
+
+</html>

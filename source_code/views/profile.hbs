@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/ProfilePageMember.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel = "icon" href ="/images/logo1circle.png" type = "image/x-icon"> 
+    <script>
+        function submitWhenYes(){
+            $("#yes").submit();
+            $("#yesbtn").attr("disabled", true);
+        }
+
+
+        $(document).ready(function(){
+            $("#yesbtn").attr("disabled", false);    
+        })
+    </script>
+</head>
+<body class="profile-page">
+    <header class="HomePageMain">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="headerName" id="paraiso">
+                PARAISO HOTEL
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="mr-auto"></div>
+                <ul class="navbar-nav text-right">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/aboutUs">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/hotel/rooms">Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/hotel/amenities">Amenities</a>
+                    </li>
+                    {{{logging}}}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Log Out</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure to log out?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <a href='/logout'>Yes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id = "image" class ="page-header header-filter"></div>
+<div class="main main-raised">
+    <div class="profile-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
+                    <div class="avatar">
+                        <img id="avatarImg" src="/images/ProfilePage/profile.png" class="img-fluid">
+                    </div>
+                    <div class="name d-flex flex-column align-items-center">
+                        <div style="text-align: center;">
+                            <p style="color:red">{{message}}</p>
+                        </div>
+                        <h3 class="titlename">{{name}}</h3>
+                        <h6>Membership Number: {{membershipNumber}}</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12 ml-auto mr-auto">
+                    <div class="profile-tabs">
+                        <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#profile" role="tab" data-toggle="tab">
+                                    <div class="material-icons style">Profile</div>
+                                    Information
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#current" role="tab" data-toggle="tab">
+                                    <div class="material-icons style">Current</div>
+                                    Reservations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#past" role="tab" data-toggle="tab">
+                                    <div class="material-icons style">Past</div>
+                                    Reservations
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Tab 1 --}}
+            <div class="tab-content tab-space">
+                <div class="tab-pane active gallery" id="profile">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-lg-5 col-12 mx-auto pl-n2">
+                                <div class="row email justify-content-lg-start justify-content-center">
+                                    <i class="fas fa-envelope fa-2x mt-n2 mr-n2"></i>
+                                    <h4 class="head">Email:</h4>
+                                    <h4>{{email}}</h4>
+                                </div>
+                                <div class="row justify-content-lg-start justify-content-center pt-3">
+                                    <i class="fas fa-credit-card fa-2x mt-n2 mr-n2"></i>
+                                    <h4 class="head">Credit Card Number:</h4>
+                                    <h4>{{creditCard}}</h4>
+                                </div>
+                                <div class="row justify-content-lg-start justify-content-center fa-2x pt-3">
+                                    <i class="fas fa-ban mt-n2 mr-n2"></i>
+                                    <h4 class="head"> Cancellation Count:</h4>
+                                    <h4>{{cancelCount}}</h4>
+                                </div>
+                                <div class="row justify-content-lg-start justify-content-center fa-2x pt-3">
+                                    <i class="fas fa-star mt-n2 mr-n2"></i>
+                                    <h4 class="head"> Membership Points:</h4>
+                                    <h4>{{points}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- Tab 2 --}}
+                <div class="tab-pane gallery" id="current">
+                    <div class="container mt-3 list">
+                        <div class="row label mb-3 py-2">
+                            <div class="col-md-4">Room Type</div>
+                            <div class="col-md-4">Details</div>
+                            <div class="col-md-2">Amount Paid</div>
+                            <div class="col-md-2"></div>
+                        </div>   
+                        <div id="currentBookings">
+                            {{#each tab2}}
+                                {{!-- Classic Deluxe --}}
+                                {{#ifCD roomtype}}
+                                    <div class="row boxshadow mb-4">
+                                        <div class="col-md-4 col-12 roomtype">
+                                            <img class="img-fluid" src ="/images/Rooms/ClassicDeluxe.jpg">
+                                        </div>
+                                        <div class="col-md-4 col-12 align-self-center ml-md-n2 ml-0">
+                                            <div class="title col-md-10 col-12">Classic Deluxe</div>
+                                            <div class="card-title col-md-10 col-12">Check-In: {{checkInDate}} <br>Check-Out: {{checkOutDate}}</div>
+                                            <div class="container">
+                                                <div class="row mt-2 ml-1">
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        ADULTS<br>
+                                                        <span class="numbers">{{adults}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        KIDS<br>
+                                                        <span class="numbers">{{kids}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 borderall pt-1">
+                                                        ROOMS<br>
+                                                        <span class="numbers">{{rooms}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="col-md-10 col-12 mt-3 ml-1">*Additional Comments/Requests : {{requests}}</p>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center ml-md-n3 ml-0">
+                                            <div class="price">PHP {{format payment.total}}</div>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center py-3 py-md-0 text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-id={{_id}} data-payment={{payment.total}} data-email={{{email}}} data-check-in={{{checkInDate}}}  data-check-out={{{checkOutDate}}} data-room-type="Classic Deluxe" data-num-rooms={{{rooms}}} >Cancel Reservation</button>
+                                        </div>
+                                    </div>
+                                {{/ifCD}}
+                                
+                                {{!-- Family Deluxe --}}
+                                {{#ifFD roomtype}}
+                                    <div class="row boxshadow mb-4">
+                                        <div class="col-md-4 col-12 roomtype">
+                                            <img class="img-fluid" src ="/images/Rooms/FamilyDeluxe.jpg">
+                                        </div>
+                                        <div class="col-md-4 col-12 align-self-center ml-md-n2 ml-0">
+                                            <div class="title col-md-10 col-12">Family Deluxe</div>
+                                            <div class="card-title col-md-10 col-12">Check-In: {{checkInDate}} <br>Check-Out: {{checkOutDate}}</div>
+                                            <div class="container">
+                                                <div class="row mt-2 ml-1">
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        ADULTS<br>
+                                                        <span class="numbers">{{adults}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        KIDS<br>
+                                                        <span class="numbers">{{kids}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 borderall pt-1">
+                                                        ROOMS<br>
+                                                        <span class="numbers">{{rooms}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="col-md-10 col-12 mt-3 ml-1">*Additional Comments/Requests : {{requests}}</p>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center ml-md-n3 ml-0">
+                                            <div class="price">PHP {{format payment.total}}</div>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center py-3 py-md-0 text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-id={{_id}} data-payment={{payment.total}} data-email={{{email}}} data-check-in={{{checkInDate}}}  data-check-out={{{checkOutDate}}} data-room-type="Family Deluxe" data-num-rooms={{{rooms}}} >Cancel Reservation</button>
+                                        </div>
+                                    </div>
+                                {{/ifFD}}
+                                
+                                {{!-- Executive Deluxe --}}
+                                {{#ifED roomtype}}
+                                    <div class="row boxshadow mb-4">
+                                        <div class="col-md-4 col-12 roomtype">
+                                            <img class="img-fluid" src ="/images/Rooms/ExecutiveDeluxe.jpg">
+                                        </div>
+                                        <div class="col-md-4 col-12 align-self-center ml-md-n2 ml-0">
+                                            <div class="title col-md-10 col-12">Executive Deluxe</div>
+                                            <div class="card-title col-md-10 col-12">Check-In: {{checkInDate}} <br>Check-Out: {{checkOutDate}}</div>
+                                            <div class="container">
+                                                <div class="row mt-2 ml-1">
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        ADULTS<br>
+                                                        <span class="numbers">{{adults}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        KIDS<br>
+                                                        <span class="numbers">{{kids}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 borderall pt-1">
+                                                        ROOMS<br>
+                                                        <span class="numbers">{{rooms}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="col-md-10 col-12 mt-3 ml-1">*Additional Comments/Requests : {{requests}}</p>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center ml-md-n3 ml-0">
+                                            <div class="price">PHP {{format payment.total}}</div>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center py-3 py-md-0 text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-id={{_id}} data-payment={{payment.total}} data-email={{{email}}} data-check-in={{{checkInDate}}}  data-check-out={{{checkOutDate}}} data-room-type="Executive Deluxe" data-num-rooms={{{rooms}}}>Cancel Reservation</button>
+                                        </div>
+                                    </div>
+                                {{/ifED}}
+                                
+                                {{!-- Junior Suite --}}
+                                {{#ifJS roomtype}}
+                                    <div class="row boxshadow mb-4">
+                                        <div class="col-md-4 col-12 roomtype">
+                                            <img class="img-fluid" src ="/images/Rooms/JuniorSuite.jpg">
+                                        </div>
+                                        <div class="col-md-4 col-12 align-self-center ml-md-n2 ml-0">
+                                            <div class="title col-md-10 col-12">Junior Suite</div>
+                                            <div class="card-title col-md-10 col-12">Check-In: {{checkInDate}} <br>Check-Out: {{checkOutDate}}</div>
+                                            <div class="container">
+                                                <div class="row mt-2 ml-1">
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        ADULTS<br>
+                                                        <span class="numbers">{{adults}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        KIDS<br>
+                                                        <span class="numbers">{{kids}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 borderall pt-1">
+                                                        ROOMS<br>
+                                                        <span class="numbers">{{rooms}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="col-md-10 col-12 mt-3 ml-1">*Additional Comments/Requests : {{requests}}</p>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center ml-md-n3 ml-0">
+                                            <div class="price">PHP {{format payment.total}}</div>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center py-3 py-md-0 text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-id={{_id}} data-payment={{payment.total}} data-email={{{email}}} data-check-in={{{checkInDate}}}  data-check-out={{{checkOutDate}}} data-room-type="Junior Suite" data-num-rooms={{{rooms}}} >Cancel Reservation</button>
+                                        </div>
+                                    </div>
+                                {{/ifJS}}
+
+                                {{!-- Executive Suite --}}
+                                {{#ifES roomtype}}
+                                    <div class="row boxshadow mb-4">
+                                        <div class="col-md-4 col-12 roomtype">
+                                            <img class="img-fluid" src ="/images/Rooms/ExecutiveSuite.jpg">
+                                        </div>
+                                        <div class="col-md-4 col-12 align-self-center ml-md-n2 ml-0">
+                                            <div class="title col-md-10 col-12">Executive Suite</div>
+                                            <div class="card-title col-md-10 col-12">Check-In: {{checkInDate}} <br>Check-Out: {{checkOutDate}}</div>
+                                            <div class="container">
+                                                <div class="row mt-2 ml-1">
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        ADULTS<br>
+                                                        <span class="numbers">{{adults}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        KIDS<br>
+                                                        <span class="numbers">{{kids}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 borderall pt-1">
+                                                        ROOMS<br>
+                                                        <span class="numbers">{{rooms}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="col-md-10 col-12 mt-3 ml-1">*Additional Comments/Requests : {{requests}}</p>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center ml-md-n3 ml-0">
+                                            <div class="price">PHP {{format payment.total}}</div>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center py-3 py-md-0 text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-id={{_id}} data-payment={{payment.total}} data-email={{{email}}} data-check-in={{{checkInDate}}}  data-check-out={{{checkOutDate}}} data-room-type="Executive Suite" data-num-rooms={{{rooms}}}>Cancel Reservation</button>
+                                        </div>
+                                    </div>
+                                {{/ifES}}
+
+                                {{!-- Grand Suite --}}
+                                {{#ifGS roomtype}}
+                                    <div class="row boxshadow mb-4">
+                                        <div class="col-md-4 col-12 roomtype">
+                                            <img class="img-fluid" src ="/images/Rooms/GrandSuite.jpg">
+                                        </div>
+                                        <div class="col-md-4 col-12 align-self-center ml-md-n2 ml-0">
+                                            <div class="title col-md-10 col-12">Grand Suite</div>
+                                            <div class="card-title col-md-10 col-12">Check-In: {{checkInDate}} <br>Check-Out: {{checkOutDate}}</div>
+                                            <div class="container">
+                                                <div class="row mt-2 ml-1">
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        ADULTS<br>
+                                                        <span class="numbers">{{adults}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 border3 pt-1">
+                                                        KIDS<br>
+                                                        <span class="numbers">{{kids}}</span>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 borderall pt-1">
+                                                        ROOMS<br>
+                                                        <span class="numbers">{{rooms}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="col-md-10 col-12 mt-3 ml-1">*Additional Comments/Requests : {{requests}}</p>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center ml-md-n3 ml-0">
+                                            <div class="price">PHP {{format payment.total}}</div>
+                                        </div>
+                                        <div class="col-md-2 col-12 align-self-center py-3 py-md-0 text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-id={{_id}} data-payment={{payment.total}} data-email={{{email}}} data-check-in={{{checkInDate}}}  data-check-out={{{checkOutDate}}} data-room-type="Grand Suite" data-num-rooms={{{rooms}}}>Cancel Reservation</button>
+                                        </div>
+                                    </div>
+                                {{/ifGS}}
+                            {{/each}}
+                            {{!-- Cancel Booking Modal --}}
+                            <div class="modal fade" data-backdrop ="false" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Confirm Cancellation</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">  
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="POST" enctype="application/x-www-form-urlencoded" class="modalForm" id="yes">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button class="btn reserve" onclick ="submitWhenYes()"  id="yesbtn">Cancel Reservation</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                $('#cancelModal').on('show.bs.modal', function (event) {
+                                    var button = $(event.relatedTarget);// Button that triggered the modal
+                                    var checkin = button.data('check-in');// Extract info from data-* attributes
+                                    var checkout = button.data('check-out');
+                                    var roomtype = button.data('room-type');
+                                    var numrooms = button.data('num-rooms');
+                                    var email = button.data('email');
+                                    var payment = button.data('payment');
+                                    var id = button.data('id');
+                                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                                    var modal = $(this)
+                                    $(".modalForm"). append(
+                                                            '<input name="email" id="email" type="hidden" value="'+email+ '">'+
+                                                            '<input name="payment" id="payment" type="hidden" value="'+payment+ '">'+
+                                                            '<input name="ID" id="ID" type="hidden" value="'+id+ '">'
+                                                           );
+                                    //<input name="checkIn" id="checkIn" type="hidden" value={{{checkInDate}}}>
+                                    modal.find('.modal-body').html('Clicking confirm will cancel your reservation and automatically refund your payment to your credit card. Point earned for this booking will also be deducted from your account.'+
+                                        '<br><u><b>Your booking details:</b></u>'+
+                                        '<br><b>Check In Date:</b> ' + checkin +
+                                        '<br><b>Check Out Date:</b> '+checkout +
+                                        '<br><b>Room Type:</b> '+roomtype +
+                                        '<br><b>Number of Rooms:</b> '+numrooms +
+                                        '<p style="color:red;"><b>Warning!:</b>If there are 5 or more cancellations in a year this account will be banned!</p>'
+                                    )
+                                })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- Tab 3 --}}
+                <div class="tab-pane gallery" id="past">
+                    <div class="container row d-flex justify-content-around"> {{!--container--}}
+                        {{#each tab3}}
+                            {{!-- Classic Deluxe--}}
+                            {{#ifCD roomtype}}
+                                <div class="card boxshadow col-md-4 col-xs-12">
+                                    <img class="card-img-top grayscale" src="/images/Rooms/ClassicDeluxe.jpg">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <i class="fas fa-calendar-check fa-2x mx-3 mt-n1 mb-2"></i>
+                                        </div>
+                                        <div class="row justify-content-center mt-2">
+                                            <div class="card-title">{{checkInDate}} - {{checkOutDate}}</div>
+                                        </div>
+                                        <div class="row justify-content-center roomtype mb-2">
+                                            Classic Deluxe
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Adults : {{adults}}
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Kids : {{kids}}
+                                        </div>
+                                        <div class="row justify-content-center mb-2 spacing">
+                                            Rooms : {{rooms}}
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="price">
+                                                PHP {{format payment.total}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/ifCD}}
+
+                            {{!-- Family Deluxe --}}
+                            {{#ifFD roomtype}}
+                                <div class="card boxshadow col-md-4 col-xs-12">
+                                    <img class="card-img-top grayscale" src="/images/Rooms/FamilyDeluxe.jpg">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <i class="fas fa-calendar-check fa-2x mx-3 mt-n1 mb-2"></i>
+                                        </div>
+                                        <div class="row justify-content-center mt-2">
+                                            <div class="card-title">{{checkInDate}} - {{checkOutDate}}</div>
+                                        </div>
+                                        <div class="row justify-content-center roomtype mb-2">
+                                            Family Deluxe
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Adults : {{adults}}
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Kids : {{kids}}
+                                        </div>
+                                        <div class="row justify-content-center mb-2 spacing">
+                                            Rooms : {{rooms}}
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="price">
+                                                PHP {{format payment.total}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/ifFD}}
+
+                            {{!-- Executive Deluxe --}}
+                            {{#ifED roomtype}}
+                                <div class="card boxshadow col-md-4 col-xs-12">
+                                    <img class="card-img-top grayscale" src="/images/Rooms/ExecutiveDeluxe.jpg">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <i class="fas fa-calendar-check fa-2x mx-3 mt-n1 mb-2"></i>
+                                        </div>
+                                        <div class="row justify-content-center mt-2">
+                                            <div class="card-title">{{checkInDate}} - {{checkOutDate}}</div>
+                                        </div>
+                                        <div class="row justify-content-center roomtype mb-2">
+                                            Executive Deluxe
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Adults : {{adults}}
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Kids : {{kids}}
+                                        </div>
+                                        <div class="row justify-content-center mb-2 spacing">
+                                            Rooms : {{rooms}}
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="price">
+                                                PHP {{format payment.total}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/ifED}}
+
+                            {{!-- Junior Suite --}}
+                            {{#ifJS roomtype}}
+                                <div class="card boxshadow col-md-4 col-xs-12">
+                                    <img class="card-img-top grayscale" src="/images/Rooms/JuniorSuite.jpg">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <i class="fas fa-calendar-check fa-2x mx-3 mt-n1 mb-2"></i>
+                                        </div>
+                                        <div class="row justify-content-center mt-2">
+                                            <div class="card-title">{{checkInDate}} - {{checkOutDate}}</div>
+                                        </div>
+                                        <div class="row justify-content-center roomtype mb-2">
+                                            Junior Suite
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Adults : {{adults}}
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Kids : {{kids}}
+                                        </div>
+                                        <div class="row justify-content-center mb-2 spacing">
+                                            Rooms : {{rooms}}
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="price">
+                                                PHP {{format payment.total}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/ifJS}}
+                            
+                            {{!-- Executive Suite --}}
+                            {{#ifES roomtype}}
+                                <div class="card boxshadow col-md-4 col-xs-12">
+                                    <img class="card-img-top grayscale" src="/images/Rooms/ExecutiveSuite.jpg">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <i class="fas fa-calendar-check fa-2x mx-3 mt-n1 mb-2"></i>
+                                        </div>
+                                        <div class="row justify-content-center mt-2">
+                                            <div class="card-title">{{checkInDate}} - {{checkOutDate}}</div>
+                                        </div>
+                                        <div class="row justify-content-center roomtype mb-2">
+                                            Executive Suite
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Adults : {{adults}}
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Kids : {{kids}}
+                                        </div>
+                                        <div class="row justify-content-center mb-2 spacing">
+                                            Rooms : {{rooms}}
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="price">
+                                                PHP {{format payment.total}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/ifES}}
+
+                            {{!-- Grand Suite --}}
+                            {{#ifGS roomtype}}
+                                <div class="card boxshadow col-md-4 col-xs-12">
+                                    <img class="card-img-top grayscale" src="/images/Rooms/GrandSuite.jpg">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <i class="fas fa-calendar-check fa-2x mx-3 mt-n1 mb-2"></i>
+                                        </div>
+                                        <div class="row justify-content-center mt-2">
+                                            <div class="card-title">{{checkInDate}} - {{checkOutDate}}</div>
+                                        </div>
+                                        <div class="row justify-content-center roomtype mb-2">
+                                            Grand Suite
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Adults : {{adults}}
+                                        </div>
+                                        <div class="row justify-content-center spacing">
+                                            Kids : {{kids}}
+                                        </div>
+                                        <div class="row justify-content-center mb-2 spacing">
+                                            Rooms : {{rooms}}
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="price">
+                                                PHP {{format payment.total}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/ifGS}}
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> (lookup . 'whichfooter') }}
+<!-- Footer -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="/javascripts/Home.js"></script>
+
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
+</body>
+</html>

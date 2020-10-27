@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Total Charge</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/TotalCharge.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/header.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel = "icon" href ="/images/logo1circle.png" type = "image/x-icon"> 
+    <script>
+
+        function computeDateSpan () {
+            //computing how many days
+            var dateIn = new Date($('#checkIn').text());
+            var dateOut = new Date($('#checkOut').text());
+
+            var diffTime = dateOut.getTime() - dateIn.getTime(); 
+            var diffDay = diffTime / (1000 * 3600 * 24);
+
+           //console.log(typeof diffDay);
+            //console.log(diffTime);
+
+            $("#dateSpan").text(diffDay);
+        }
+
+        function calculate(){
+            var fees = 0;
+            var room = $("#roomfees");
+            var extra = $("#extrafees");
+            var service = $("#servicefees");
+            var total = $("#total");
+            var breakfast = $("#breakfastbuffet");
+            var lunch = $("#lunchbuffet");
+            var dinner = $("#dinnerbuffet");
+            var allbuffet = $("#allbuffet");
+            var pickup = $("#pickupprice");
+            var numrooms = $("#numrooms");
+            var requestString ="";
+            var additional = $("#additionalrequest");
+            var totalStay = $("#totalwholestay");
+            var daySpan = $("#dateSpan");
+
+            var inputtotal = $("#inputtotal");
+
+             $("#airport").text(parseFloat(0).toFixed(2));
+            
+            if ($("input[name='extrafee']:checked").val() === undefined){
+                extra.text(parseFloat(0).toFixed(2));
+                var amount = parseFloat(room.text().trim()) + parseFloat(service.text().trim()) + parseFloat(extra.text());
+                var part = parseInt(daySpan.text()) * amount;
+                part = part.toFixed(2);
+                total.text(part);
+                var totalfinal = parseFloat(total.text()) + parseFloat($("#airport").text());
+                totalfinal = totalfinal.toFixed(2);
+                totalStay.text(totalfinal);
+                inputtotal.attr("value",totalfinal);
+                additional.val("");
+
+            }
+
+            if ($("input[name='extrafee']:checked") != "undefined"){
+                $.each($("input[name='extrafee']:checked"), function(){
+                    var string;
+                    if ($(this).val() === 'breakfastbuffet'){
+                        fees = parseFloat(fees) + parseFloat(breakfast.text());
+                        string = 'Daily Breakfast Buffet';
+                    } else if ($(this).val() === 'lunchbuffet'){
+                        fees = parseFloat(fees) + parseFloat(lunch.text());
+                        string = 'Daily Lunch Buffet';
+                    } else if ($(this).val() === 'dinnerbuffet') {
+                        fees = parseFloat(fees) + parseFloat(dinner.text());
+                        string = 'Daily Dinner Buffet';
+                    } else if ($(this).val() === 'allbuffet'){
+                        fees = parseFloat(fees) + parseFloat(allbuffet.text());
+                        string = 'Daily Buffet';
+                    } else if ($(this).val() === 'pickupprice'){
+                        //fees = parseFloat(fees) + parseFloat(pickup.text());
+                        $("#airport").text(parseFloat(pickup.text()).toFixed(2));
+                        string = 'Arrival and Departure Airport Pick-Up';
+                    }
+
+                    requestString = requestString + string + ", "
+
+                    extra.text(fees.toFixed(2));
+                    var amount = parseFloat(room.text().trim()) + parseFloat(service.text().trim()) + parseFloat(fees);
+                    var part = parseInt(daySpan.text()) * amount;
+                    part = part.toFixed(2);
+                    total.text(part);
+                    var totalfinal = parseFloat(total.text()) + parseFloat($("#airport").text());
+                    totalfinal = totalfinal.toFixed(2);
+                    totalStay.text(totalfinal);
+                    inputtotal.attr("value",totalfinal);
+                });
+
+                if (requestString !== ""){
+                    //console.log(requestString);
+                    requestString = requestString.substring(0, requestString.length - 2);
+                    //console.log(requestString);
+                    additional.val(requestString);
+                }
+            }
+        }
+
+        function setRoomFee(){
+            var room = $("#roomfees");
+            var numrooms = $("#numrooms");
+            var roomfee = parseFloat(room.text().trim()) * parseFloat(numrooms.val().trim());
+            room.text(roomfee.toFixed(2));
+
+        }
+
+        function displayDate(){
+            var cidate = new Date($('#checkIn').text());
+            var codate = new Date($('#checkOut').text());
+            var months = [ "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            var days = [ "Sun", "Mon", "Tues", "Wed", "Thurs", "Fri",
+                "Sat"];
+
+            var cimonth = months[cidate.getMonth()];
+            var ciyear = cidate.getFullYear();
+            var ciday = cidate.getDate();
+            var cidayweek = days[cidate.getUTCDay()];
+
+            var comonth = months[codate.getMonth()];
+            var coyear = codate.getFullYear();
+            var coday = codate.getDate();
+            var codayweek = days[codate.getUTCDay()];
+
+            if (ciday < 10){
+                ciday = "0" + ciday;
+            }
+            if (coday < 10){
+                coday = "0" + coday;
+            }
+
+            var checkinstring = ciday + " " + cimonth + " " + ciyear; 
+            var checkoutstring = coday + " " + comonth + " " + coyear; 
+
+            $("#checkIn").text(checkinstring);
+            $("#checkOut").text(checkoutstring);
+
+            $("#cidayweek").text(cidayweek);
+            $("#codayweek").text(codayweek);
+        }
+
+        function setBeds(){
+            $.each($("input[type='radio']:checked"), function(){
+                if ($(this).val() === 'firstchoice'){
+                    $("#typebed").val($("#firstbed").text());
+                } else if ($(this).val() === 'secondchoice'){
+                    $("#typebed").val($("#secondbed").text());
+                }
+            });
+        }
+
+        $(document).ready(function(){
+            computeDateSpan();
+            setRoomFee();
+            calculate();
+            displayDate();    
+            $("#defaultbed").attr("checked", true);
+            setBeds();
+        });
+    </script>
+</head>
+<body>
+    {{> (lookup . 'whichheader') }}
+<div class="container summary mt-4">
+    <div class="row py-2">
+        <div class="col-md-12 col-12" style="text-align: center">
+            <b>Stay Summary</b>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col-md-2 col-12">
+            <img class="img-fluid" src ="{{source}}">
+        </div>
+        <div class="col-md-6 col-12 align-self-center pt-3 pt-md-0">
+            <p><span style="font-weight:1000"><span id="cidayweek">Mon</span>, <span id="checkIn">{{data.checkInDate}}</span> / <span id="codayweek">Sun</span>, <span id="checkOut">{{data.checkOutDate}}</span></span><br><br>
+                <span style="font-weight:1000">Rooms & Guests:</span> {{data.rooms}} Room/s, {{data.adults}} Adult/s, {{data.kids}} Kid/s<br><br><span style="font-weight:1000">Room Type:</span> {{data.roomtype}}</p>
+        </div>
+        <div class="col-md-3 col-12">
+        </div>
+    </div>
+</div>
+<div class="container mt-4" id="guest_form">
+    <div class ="row">
+        <div class="col-md-7 col-12">
+            <span class="error-label mr-auto ml-n2" id="owner-error">
+                {{{databaseError}}}
+            </span>
+            {{> (lookup . 'whichtotalCharge') }}
+        </div>
+        <div class="col-md-5 mb-4 col-12">
+            <div class="row mt-4 mb-4" id="container">
+                <div class="container py-3" id="container">
+                    <div class="row mx-1 my-1 bgcolor">
+                        <div class="container mt-2" id="charge">
+                            <h1 class="py-2 mt-1 mb-4">Fees</h1>
+                            <div class="row pb-3">
+                                <div class="col-md-6 col-12 first">
+                                    Room Fees x {{data.rooms}} Room/s:
+                                </div>
+                                <div class="col-md-6 col-12 second">
+                                    PHP <span id="roomfees">{{data.pricePerRoom}}</span>
+                                </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col-md-6  col-12 first">
+                                    Additional Fees:
+                                </div>
+                                <div class="col-md-6  col-12 second">
+                                    PHP <span id="extrafees">0.00</span>
+                                </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col-md-6  col-12 first">
+                                    Service Fee and Tax:
+                                </div>
+                                <div class="col-md-6  col-12 second">
+                                    PHP <span id="servicefees">1400.00</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row pb-3 pt-2">
+                                <div class="col-md-6 col-12 first">
+                                   <span style="font-size: 16px;">Total x <span id="dateSpan"></span> Night/s:</span>
+                                </div>
+                                <div class="col-md-6  col-12 second" style="font-size: 16px;">
+                                    PHP <span id="total">1400.00</span>
+                                </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col-md-6 col-12 first">
+                                   <span style="font-size: 16px;">Pick-Up Fees</span>
+                                </div>
+                                <div class="col-md-6  col-12 second" style="font-size: 16px;">
+                                    PHP <span id="airport">0.00</span>
+                                </div>
+                            </div>
+                            <div class ="row pt-4 pb-2">
+                                <div class="col-md-6 col-12 first">
+                                    <span style="font-size: 18px;"><b>Total Amount</b></span>
+                                </div>
+                                <div class="col-md-6 col-12 second">
+                                    <span style="font-size: 18px;"><b>PHP <span id="totalwholestay">9400.00</span></b></span>
+                                </div>
+                            </div>
+                            {{!-- <div class ="row pt-2">
+                                <div class="col-12 text-align-center pb-2">
+                                </div>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{> (lookup . 'whichfooter') }}
+<!-- Footer -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="/javascripts/Home.js"></script>
+
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+</body>
+</html>
